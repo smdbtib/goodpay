@@ -1,4 +1,5 @@
 import userLogin from "./moduloDados.js";
+import communicationModal from "./moduloAlertDados.js";
 
 class ControlerUserLogin{
     constructor(status){
@@ -8,17 +9,20 @@ class ControlerUserLogin{
         this.status = true;
     }
     loginInfo(userName, password) {
-        var infoCheck = userLogin.find((userLogin) => userLogin.userName === userName);
-    
-        if(!infoCheck){
-            alert("User not found!")
-        }else{
-            console.log(infoCheck);
-            if (infoCheck.password === password) {
-                this.checkLogin();
-                alert(`Logged: ${this.status}` );
+        var checkUser = userLogin.find((userLogin) => userLogin.userName === userName);
+
+        if (userName === null || userName === "" || !password || password === null || password === "") {
+            return communicationModal.find((communicationModal) => communicationModal.idModal === "fieldsEmpyt1");
+        } else {
+            if (!checkUser) {
+                return communicationModal.find((communicationModal) => communicationModal.idModal === "userNotFound1");
             } else {
-                alert("Is not logged in!");
+                if (checkUser.password === password) {
+                    this.checkLogin();
+                    return communicationModal.find((communicationModal) => communicationModal.idModal === "loggedSuccess1");
+                } else {
+                    return communicationModal.find((communicationModal) => communicationModal.idModal === "loggedEror1");
+                }
             }
         }
     }
